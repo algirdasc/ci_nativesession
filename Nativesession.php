@@ -21,7 +21,7 @@ class Nativesession
         if (!session_start() || !$this->session_valid_id(session_id())) {
             log_message('error', 'Failed to create session or existing session ID is invalid');
             $this->ci->input->set_cookie(session_name(), null);
-            redirect('/');
+            die('Failed to create session or existing session ID is invalid');
         }
 
         $params = session_get_cookie_params();
@@ -233,7 +233,7 @@ class Nativesession
 
     public function session_valid_id($session_id)
     {
-        return !!preg_match('/^[a-z0-9,-]{32}$/', $session_id);
+        return preg_match('/^[-,a-zA-Z0-9]{1,128}$/', $session_id) > 0;
     }
 
 }
